@@ -44,3 +44,4 @@ pnpm-debug.log*
 *.sw?
 
 /Users/xzmx/Downloads/my-project/django-vue-tutorial/特殊文件/
+.gitignore
