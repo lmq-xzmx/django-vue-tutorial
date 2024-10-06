@@ -43,5 +43,5 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-特殊文件
+特殊文件/
 .gitignore

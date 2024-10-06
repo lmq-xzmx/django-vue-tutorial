@@ -1,0 +1,22 @@
+/* static/admin/css/custom_admin.css */
+body {
+    background-color: #f9f9f9; /* 修改背景颜色 */
+}
+
+.module h2 {
+    color: #444; /* 修改模块标题颜色 */
+}
+
+.change-form {
+    font-family: 'Arial', sans-serif; /* 修改字体 */
+}
+
+/* 针对 Toggle theme 的样式调整 */
+.toggle-theme {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+}
