@@ -5,4 +5,17 @@
 {% block extrahead %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+     <title>TinyMCE Integration</title>
+        <!-- 引用 TinyMCE 的 JavaScript 文件 -->
+        <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+        <script>
+            // 初始化 TinyMCE
+            tinymce.init({
+                selector: 'textarea',  // 选择器可以是你想要应用 TinyMCE 的元素
+                plugins: 'lists link image preview',  // 你可以根据需要添加更多插件
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                menubar: false,  // 如果不需要菜单栏，可以将其设置为 false
+                height: 300  // 设置编辑器的高度
+            });
+        </script>
 {% endblock %}

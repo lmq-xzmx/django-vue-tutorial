@@ -30,16 +30,17 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/dist/"),
-    os.path.join(BASE_DIR, "static"),  # 配置django-admin的static
+    #os.path.join(BASE_DIR, "static"),  # 配置django-admin的static
 ]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -47,26 +48,37 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.auth', # 权限管理模块
+    'django.contrib.contenttypes',# 内容管理模块
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'corsheaders',
     'rest_framework',
+    #'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'article',
-    'user_info',
     'comment',
+    'user_info',
+    'chat',
+    'tinymce',
+    
 ]
 
 MIDDLEWARE = [
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+# CORS_ALLOW_ALL_ORIGINS = True  # 或者设置特定的允许域
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8082",
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -74,8 +86,9 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        #'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS':['frontend/dist'],
+        
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,23 +107,23 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'django_vue_tutorial',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'django_vue_tutorial',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -148,12 +161,17 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+                
+    ],
     'PAGE_SIZE': 3,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+
 
     # 'DEFAULT_RENDERER_CLASSES': [
     #     'rest_framework.renderers.JSONRenderer',
@@ -169,3 +187,36 @@ SIMPLE_JWT = {
 
 MEDIA_URL =  '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 360,
+    'width': 800,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'theme': 'silver',
+    'plugins': '''
+        textcolor save link image media preview codesample contextmenu
+        table code lists fullscreen  insertdatetime  nonbreaking
+        contextmenu directionality searchreplace wordcount visualblocks
+        visualchars code fullscreen autolink lists  charmap print  hr
+        anchor pagebreak
+    ''',
+    'toolbar1': '''
+        fullscreen preview bold italic underline | fontselect,
+        fontsizeselect  | forecolor backcolor | alignleft alignright |
+        aligncenter alignjustify | indent outdent | bullist numlist table |
+        | link image media | codesample |
+    ''',
+    'toolbar2': '''
+        visualblocks visualchars |
+        charmap hr pagebreak nonbreaking anchor |  code |
+    ''',
+    'external_plugins': {
+            'plugin_name': 'https://cdn.tinymce.com/4/plugins/plugin_name/plugin.min.js'},
+    'contextmenu': 'formats | link image',
+    'menubar': True,
+    'statusbar': True,
+}
+
+
