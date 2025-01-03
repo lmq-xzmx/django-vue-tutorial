@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'article',
     'comment',
     'user_info',
-    'chat',
+    'chat_base',
     'tinymce',
     
 ]

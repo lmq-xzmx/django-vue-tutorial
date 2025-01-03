@@ -49,7 +49,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # article
     path('api/article/', include('article.urls', namespace='article')),
-    path('chat/', include('chat.urls')),
+    path('chat_base/', include('chat_base.urls')),
     path('tinymce/', include('tinymce.urls')),
 ]
 
